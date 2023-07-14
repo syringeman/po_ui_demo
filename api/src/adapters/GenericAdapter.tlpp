@@ -1,0 +1,75 @@
+#Include 'tlpp-core.th'
+
+Namespace TotvsDevelopers.Demo.Adapters
+
+Class GenericAdapter From FWAdapterBaseV2
+  	Private Data _cQuery 	 As Character
+	Private Data _cWhere 	 As Character
+	Private Data _aMapFields As Array
+
+	Public Method New()
+	Public Method BuildPage(nCurrentPage As Numeric, nPageSize As Numeric, cWhere as Character, cOrder as Character)
+  	Public Method setMapFields(aMapFields)
+	Public Method getMapFields()
+	Public Method setQuery(cQuery)
+	Public Method getQuery()
+	
+EndClass
+
+Method New(cQuery) CLASS GenericAdapter
+	_Super:New( 'GET', .T. )
+
+	if !Empty(cQuery)
+		Self:_cQuery := cQuery
+	endif
+return
+
+Method BuildPage( nCurrentPage As Numeric, nPageSize As Numeric, cWhere as Character, cOrder as Character ) Class GenericAdapter
+	Default nCurrentPage 	:= 1
+	Default nPageSize 		:= 10
+	Default cWhere 			:= ''
+	Default cOrder			:= ''
+
+	Self:SetPage( nCurrentPage )
+	Self:SetPageSize( nPageSize )
+	Self:SetQuery( Self:_cQuery )
+
+	if !Empty(cWhere)
+		Self:SetWhere(cWhere)
+	endif
+
+	if !Empty(cOrder)
+		Self:SetOrder(cOrder)
+	endif
+
+	If ( Self:Execute() )
+		Self:FillGetResponse()
+	EndIf
+Return
+
+Method setQuery(cQuery) Class GenericAdapter
+	Self:_cQuery := cQuery
+Return
+
+Method getQuery() Class GenericAdapter
+Return Self:_cQuery
+
+Method setMapFields(aMapFields) Class GenericAdapter
+	Local nCont := 1
+
+	default aMapFields := {}
+
+	for nCont := 1 to len(aMapFields)
+		Self:AddMapFields(aMapFields[nCont][1],;
+			aMapFields[nCont][2],;
+			aMapFields[nCont][3],;
+			aMapFields[nCont][4],;
+			aMapFields[nCont][5])
+	next nCont
+
+	Self:_aMapFields := aMapFields
+Return
+
+Method getMapFields() Class GenericAdapter
+Return Self:_aMapFields
+

@@ -1,0 +1,111 @@
+#Include "tlpp-core.th"
+#Include "tlpp-probat.th"
+
+Namespace TotvsDevelopers.Demo.test
+
+Using Namespace tlpp.probat
+Using Namespace TotvsDevelopers.Demo.Services
+
+Static jGenericMock := {;
+    "B1_COD":       "TSTPRODCODE",;
+    "B1_DESC":      "PRODUCT TEST",;
+    "B1_TIPO":      "PA",;
+    "B1_UM":        "UN",;
+    "B1_LOCPAD":    "01";
+}
+
+Static cQuery :=    " SELECT #QueryFields# FROM " + RetSqlName( 'SB1' ) + " SB1 " +;
+                    " WHERE #QueryWhere# "
+
+Static cWhere :=    "B1_FILIAL = '"+ FWxFilial('SB1') +"' AND SB1.D_E_L_E_T_ = ' '"               
+
+@TestFixture(suite='demo',description="Valida a instancia de GenericService")
+Class GenericServiceSpec
+    Private Data oService
+
+    Public Method New() constructor
+
+    @OneTimeSetUp()
+    Public Method Setup()
+
+    @OneTimeTearDown()
+    Public Method TearDown()
+
+    @Test('It should validates the instance')
+    Public Method ValidateInstance()
+
+    @Test('It should return a page os products')
+    Public Method GetPage()
+
+    @Test('It should create a new product and return success = true')
+    Public Method CreateProduct()
+
+    @Test('It should update a product and return success = true')
+    Public Method UpdateProduct()
+
+    @Test('Remove product and return true')
+    Public Method RemoveProduct()
+EndClass
+
+Method New() Class GenericServiceSpec
+Return Self
+
+Method Setup() Class GenericServiceSpec
+    RpcSetType(3)
+    RpcSetEnv('99', '01')
+    Self:oService := GenericService():New('SB1',1,'MATA010','SB1MASTER',cQuery,cWhere)
+Return .T.
+
+Method TearDown() Class GenericServiceSpec
+    FreeObj( self:oService )
+    RpcClearEnv()
+Return .T.
+
+Method ValidateInstance() Class GenericServiceSpec
+    AssertEquals( ValType( Self:oService ), "O" )
+Return .T.
+
+Method GetPage() Class GenericServiceSpec
+    Local xResult := Self:oService:GetPage()
+    AssertTrue( xResult["success"] )
+Return .T.
+
+Method CreateProduct() Class GenericServiceSpec
+    Local xResult
+
+    Begin Transaction
+        xResult := Self:oService:SaveOrUpdate( jGenericMock )
+        AssertTrue( xResult["success"] )
+        DisarmTransaction()
+    End Transaction
+Return .T.
+
+Method UpdateProduct() Class GenericServiceSpec
+    Local xResult
+
+    Begin Transaction
+        // Primeiro salva o produto
+        xResult := Self:oService:SaveOrUpdate( jGenericMock )
+        AssertTrue( xResult["success"] )
+        // Atualizacao
+        xResult := Self:oService:SaveOrUpdate( jGenericMock, "TSTPRODCODE" )
+        AssertTrue( xResult["success"] )
+        DisarmTransaction()
+    End Transaction
+Return .T.
+
+Method RemoveProduct() Class GenericServiceSpec
+    Local xResult
+
+    Begin Transaction
+        // Primeiro salva o produto
+        xResult := Self:oService:SaveOrUpdate( jGenericMock )
+        AssertTrue( xResult["success"] )
+        // Atualizacao
+        xResult := Self:oService:Remove("B1_COD","TSTPRODCODE" )
+        AssertTrue( xResult["success"] )
+        DisarmTransaction()
+    End Transaction
+Return .T.
+
+

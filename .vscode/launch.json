@@ -4,45 +4,36 @@
 		{
 			"type": "totvs_language_debug",
 			"request": "launch",
-			"name": "Smart Client Debug",
+			"name": "TOTVS Language Debug",
 			"program": "${command:AskForProgramName}",
-			"smartclientBin": "C:/TOTVS12/Protheus/Protheus/bin/smartclient/smartclient.exe",
 			"cwb": "${workspaceFolder}",
+			"smartclientBin": "D:\\GoogleDrive\\Development\\Totvs\\Clientes\\AmPm\\smartclient_protheus_homologacao\\smartclient.exe",
 			"isMultiSession": true,
-			"enableTableSync": true,
-			"enableMultiThread": true
+			"enableTableSync": true
 		}
 	],
 	"lastPrograms": [
 		{
-			"label": "u_xxx"
+			"label": "u_APFATP19"
 		},
 		{
-			"args": [],
-			"label": "TLPP.PROBAT.RUN"
-		},
-		{
-			"args": [
-				"type:namespace",
-				"TotvsDevelopers.Demo.test"
-			],
-			"label": "TLPP.PROBAT.RUN"
-		},
-		{
-			"label": "mpsdu"
-		},
-		{
-			"label": "sigacfg"
+			"label": "U_APCOMF40"
 		},
 		{
 			"label": "sigamdi"
 		},
 		{
-			"label": "runTests"
+			"label": "u_APFATR02"
 		},
 		{
-			"label": "u_runTests"
+			"label": "sigacfg"
+		},
+		{
+			"label": "U_TLPPIncs"
+		},
+		{
+			"label": "U_runTests"
 		}
 	],
-	"lastProgramExecuted": "u_runTests"
+	"lastProgramExecuted": "U_runTests"
 }
